@@ -1,3 +1,7 @@
+# Project Setup Video Link
+
+Click [here](https://youtu.be/B_tKSmP_ZsI?si=KA54-7taa-HrBqWQ) to learn how to set up the project.
+
 # .
 
 This template should help get you started developing with Vue 3 in Vite.
