@@ -7,16 +7,15 @@ export const useProductsStore = defineStore("products", {
   actions: {
     async fetchProducts() {
       try {
-        const response = await fetch("http://api.test/index.php", {
+        const response = await fetch("http://api.com/products", {
           method: "GET",
         });
 
-        if (!response.ok) throw new Error("Failed to fetch data");
-
         const data = await response.json();
-        this.products = data.products;
+        console.log(data);
+        this.products = data;
       } catch (error) {
-        console.error("Error: ", error.message);
+        console.error(error);
       }
     },
   },

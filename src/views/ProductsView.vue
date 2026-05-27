@@ -1,16 +1,19 @@
 <script setup>
 import Product from "@/components/Product.vue";
 import { useProductsStore } from "@/stores/products.js";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 const category = ref("all");
 
 const productsStore = useProductsStore();
 
-// const FilterByCategory = computed(() => {
-//   if ((category.value = "all")) return productsStore.products;
-//   else return productsStore.products.filter(product => product.category.toLowerCase() = category.value)
-// });
+const FilterByCategory = computed(() => {
+  if (category.value === "all") return productsStore.products;
+  else
+    return productsStore.products.filter(
+      (product) => product.category_name.toLowerCase() === category.value,
+    );
+});
 
 onMounted(() => {
   productsStore.fetchProducts();
@@ -30,7 +33,7 @@ onMounted(() => {
 
   <div class="container">
     <Product
-      v-for="product in productsStore.products"
+      v-for="product in FilterByCategory"
       :product="product"
       :key="product.id"
     />
