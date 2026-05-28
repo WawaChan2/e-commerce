@@ -1,19 +1,9 @@
 <script setup>
 import Product from "@/components/Product.vue";
 import { useProductsStore } from "@/stores/products.js";
-import { ref, onMounted, computed } from "vue";
-
-const category = ref("all");
+import { onMounted } from "vue";
 
 const productsStore = useProductsStore();
-
-const FilterByCategory = computed(() => {
-  if (category.value === "all") return productsStore.products;
-  else
-    return productsStore.products.filter(
-      (product) => product.category_name.toLowerCase() === category.value,
-    );
-});
 
 onMounted(() => {
   productsStore.fetchProducts();
@@ -21,7 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <select v-model="category">
+  <select v-model="productsStore.category">
     <option value="all">All</option>
     <option value="electronics">Electronics</option>
     <option value="books">Books</option>
@@ -31,9 +21,16 @@ onMounted(() => {
     <option value="others">Others</option>
   </select>
 
+  <input
+    type="text"
+    v-model="productsStore.keyword"
+    placeholder="Discover products..."
+  />
+  <button @click="productsStore.applyKeyword()">Search</button>
+
   <div class="container">
     <Product
-      v-for="product in FilterByCategory"
+      v-for="product in productsStore.filteredProducts"
       :product="product"
       :key="product.id"
     />

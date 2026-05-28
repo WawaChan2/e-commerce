@@ -2,8 +2,27 @@ import { defineStore } from "pinia";
 
 export const useProductsStore = defineStore("products", {
   state: () => ({
+    category: "all",
+    keyword: "",
+    appliedKeyword: "",
     products: [],
   }),
+
+  getters: {
+    filteredProducts(state) {
+      return state.products
+        .filter((product) => {
+          if (state.category === "all") return true;
+          return product.category_name.toLowerCase() === state.category;
+        })
+        .filter((product) =>
+          product.product_name
+            .toLowerCase()
+            .includes(state.appliedKeyword.toLowerCase()),
+        );
+    },
+  },
+
   actions: {
     async fetchProducts() {
       try {
@@ -17,6 +36,10 @@ export const useProductsStore = defineStore("products", {
       } catch (error) {
         console.error(error);
       }
+    },
+
+    applyKeyword() {
+      this.appliedKeyword = this.keyword;
     },
   },
 });
