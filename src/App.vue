@@ -1,51 +1,82 @@
-<script setup></script>
+<script setup>
+// Layout wrapper for your E-Commerce App
+</script>
 
 <template>
- <div class="app-layout">
-
+  <div class="app-layout">
+    
     <header class="header">
       <div class="logo-icon">🛒</div>
       <h1>E-Commerce Inventory</h1>
     </header>
 
-  <nav class="navbar">
-    <RouterLink to="/products" class="nav-link">Products</RouterLink>
-    <RouterLink to="/orders" class="nav-link">Orders</RouterLink>
-    <RouterLink to="/profile" class="nav-link">Profile</RouterLink>
-    <RouterLink to="/admin" class="nav-link">Admin</RouterLink>
-  </nav>
+    <nav class="navbar">
+      <RouterLink to="/products" class="nav-link">
+        <span class="icon">🛍️</span> Products
+      </RouterLink>
+      <RouterLink to="/orders" class="nav-link">
+        <span class="icon">📦</span> Orders
+      </RouterLink>
+      <RouterLink to="/profile" class="nav-link">
+        <span class="icon">👤</span> Profile
+      </RouterLink>
+      <RouterLink to="/admin" class="nav-link">
+        <span class="icon">⚙️</span> Admin
+      </RouterLink>
+    </nav>
 
-    <RouterView />
+    <main class="container">
+      <RouterView />
+    </main>
+
   </div>
 </template>
+
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f8f9ff;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+</style>
 
 <style scoped>
 
 .app-layout {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8f9ff, #fff5f8); 
-  padding: 40px;
+  padding: 20px;
   font-family: system-ui, -apple-system, sans-serif;
   color: #333;
 }
 
+.header, .navbar {
+  width: 100%;
+  max-width: 1050px; 
+  margin: 0 auto 20px auto; 
+  box-sizing: border-box;
+}
+
 .header {
-  color: transparent;
-  background-color: white; 
+  background-color: #ffffff; 
   padding: 16px 24px; 
-  margin: 10px 0; 
-  box-sizing: border-box; 
-  box-shadow: 0 4px 12px rgba(148, 148, 148, 0.351); 
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(148, 148, 148, 0.15); 
   display: flex; 
   align-items: center; 
-
 }
 
 .header h1 {
-  margin: 0; 
-  margin-left: 12px; 
+  margin: 0 0 0 12px; 
   font-size: 24px; 
+  font-weight: 700;
   background: linear-gradient(to right, #6e38ec, #b46efb);
+  -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
@@ -60,56 +91,77 @@
 
 .navbar {
   display: flex;
-  gap: 200px;
+  flex-wrap: wrap; 
+  gap: 15px; 
   padding: 15px;
-  max-width: 1050px; 
-  width: 100%;
-  margin: 0 auto 20px auto; 
   border-radius: 15px;
-  box-sizing: border-box;
   border: 1px solid #cccccc37;
-  background: #dedede48;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(148, 148, 148, 0.351); 
+  background: #e7d4ee14;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(148, 148, 148, 0.368); 
 }
 
 .nav-link {
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 24px;
+  border-radius: 8px; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
 }
 
 .nav-link:hover {
-  color: #42b983;
+  background: #f3f4f6;
+  color: #333;
 }
 
+.nav-link.active,
 .nav-link.router-link-active {
-  color: #42b983;
-  font-weight: bold;
+  background: linear-gradient(to right, #7c3aed, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 12px rgb(238, 230, 255);
+  width: fit-content;
 }
 
-.nav-link.router-link-exact-active {
-  border-bottom: 2px solid #42b983;
-}
-
-/* --- Responsive Container Layout (Section A) --- */
+/* --- Responsive Container Layout --- */
 
 /* Mobile */
 .container {
   padding: 14px;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Tablet */
 @media (min-width: 600px) {
+  .app-layout {
+    padding: 30px;
+  }
   .container {
     padding: 20px;
+  }
+  .navbar {
+    gap: 40px; 
   }
 }
 
 /* Desktop */
 @media (min-width: 900px) {
+  .app-layout {
+    padding: 40px;
+  }
   .container {
     padding: 24px;
+  }
+  .navbar {
+    gap: 80px; 
   }
 }
 </style>
