@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useProductsStore } from '@/stores/products.js';
+import { useOrdersStore } from '@/stores/orders.js';
  
-const store = useProductsStore();
+const productStore = useProductsStore();
+const ordersStore = useOrdersStore();
 const selectedProduct = ref(null);
 const restockQty      = ref(10);
 const restocking      = ref(false);
@@ -51,12 +53,12 @@ async function executeRestock() {
     const newQty = prev + qty;
  
     // Update store locally so UI reflects immediately
-    const idx = store.products.findIndex(
+    const idx = productStore.products.findIndex(
       p => p.product_id === selectedProduct.value.product_id
     );
     if (idx !== -1) {
-      store.products[idx].total_stock = newQty;
-      selectedProduct.value = { ...store.products[idx] };
+      productStore.products[idx].total_stock = newQty;
+      selectedProduct.value = { ...productStore.products[idx] };
     }
  
     // Log movement
@@ -79,12 +81,12 @@ async function executeRestock() {
     const qty  = Number(restockQty.value);
     const newQty = prev + qty;
  
-    const idx = store.products.findIndex(
+    const idx = productStore.products.findIndex(
       p => p.product_id === selectedProduct.value.product_id
     );
     if (idx !== -1) {
-      store.products[idx].total_stock = newQty;
-      selectedProduct.value = { ...store.products[idx] };
+      productStore.products[idx].total_stock = newQty;
+      selectedProduct.value = { ...productStore.products[idx] };
     }
  
     movements.value.unshift({
@@ -105,7 +107,7 @@ async function executeRestock() {
 }
  
 const allMovements = computed(() => {
-  const orderMoves = store.orders.flatMap(o => {
+  const orderMoves = ordersStore.orders?.flatMap(o => {
     if (!o.items) return [];
     return o.items.map(item => ({
       datetime: new Date(o.order_date).toLocaleString('en-MY'),
@@ -116,13 +118,14 @@ const allMovements = computed(() => {
       newQty:   null,
       ref:      `#${o.order_id}`,
     }));
-  });
+  }) || [];
+
   return [...movements.value, ...orderMoves];
 });
  
 onMounted(async () => {
-  await store.fetchProducts();
-  await store.fetchOrders();
+  await productStore.fetchProducts();
+  await ordersStore.fetchOrders();
 });
 </script>
 
@@ -140,12 +143,12 @@ onMounted(async () => {
       <div class="panel">
         <h2 class="panel-title">Current Stock Levels</h2>
  
-        <div v-if="store.loading" class="loading-state">
+        <div v-if="productStore.loading" class="loading-state">
           <div class="spinner"></div> Loading inventory…
         </div>
  
         <div v-else class="stock-list">
-          <div v-for="product in store.products" :key="product.product_id" class="stock-row" :class="{ selected: selectedProduct?.product_id === product.product_id }">            
+          <div v-for="product in productStore.products" :key="product.product_id" class="stock-row" :class="{ selected: selectedProduct?.product_id === product.product_id }">            
             <div class="stock-info">
               <p class="stock-name">{{ product.product_name }}</p>
               <p class="stock-qty">
@@ -158,7 +161,7 @@ onMounted(async () => {
             </button>
           </div>
  
-          <div v-if="store.products.length === 0" class="empty-inline">
+          <div v-if="productStore.products.length === 0" class="empty-inline">
             No products found.
           </div>
         </div>
