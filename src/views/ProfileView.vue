@@ -7,6 +7,7 @@ import ProfileComponent from '@/components/Profile.vue';
 const profileStore = useProfileStore();
 const { selectedUser, userStats, purchaseHistory, isLoading } = storeToRefs(profileStore);
 
+// Watch for changes in the selected user and fetch new data accordingly.
 watch(selectedUser, (newUserId) => {
   profileStore.fetchUserData(newUserId);
 });
@@ -26,7 +27,7 @@ watch(selectedUser, (newUserId) => {
         </select>
       </div>
     </div>
-
+    
     <div v-if="isLoading" style="text-align: center; padding: 20px; color: #6b7280;">
       Loading data...
     </div>

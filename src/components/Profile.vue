@@ -1,6 +1,13 @@
 <script setup>
 
+// This component receives user stats and 
+// purchase history as props and displays them 
+// in a structured format.
+
 defineProps({
+  // Expect an object containing 
+  // user statistics such as
+  // totalOrders, activeOrders, and totalSpent.
   stats: {
     type: Object,
     required: true
