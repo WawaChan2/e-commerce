@@ -5,6 +5,7 @@ export const useProductsStore = defineStore("products", {
     category: "all",
     keyword: "",
     products: [],
+    loading: false, 
   }),
 
   getters: {
@@ -17,13 +18,14 @@ export const useProductsStore = defineStore("products", {
         .filter((product) =>
           product.product_name
             .toLowerCase()
-            .includes(state.keyword.toLowerCase()),
+            .includes(state.keyword.toLowerCase())
         );
     },
   },
 
   actions: {
     async fetchProducts() {
+      this.loading = true;
       try {
         const response = await fetch("http://api.com/products", {
           method: "GET",
@@ -34,6 +36,8 @@ export const useProductsStore = defineStore("products", {
         this.products = data;
       } catch (error) {
         console.error(error);
+      } finally {
+        this.loading = false; // Turn off loading spinner
       }
     },
   },

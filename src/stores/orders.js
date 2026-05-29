@@ -4,10 +4,12 @@ import { useProductsStore } from "@/stores/products.js";
 export const useOrdersStore = defineStore("orders", {
   state: () => ({
     orders: [],
+    loading: false, 
   }),
 
   actions: {
     async fetchOrders() {
+      this.loading = true; 
       try {
         const response = await fetch("http://api.com/orders", {
           method: "GET",
@@ -17,6 +19,8 @@ export const useOrdersStore = defineStore("orders", {
         return data;
       } catch (error) {
         console.error("Failed to fetch order history:", error);
+      } finally {
+        this.loading = false; 
       }
     },
 

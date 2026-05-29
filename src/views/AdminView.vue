@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useProductsStore } from '@/stores/products.js';
 import { useOrdersStore } from '@/stores/orders.js';
- 
+
 const productStore = useProductsStore();
 const ordersStore = useOrdersStore();
 const selectedProduct = ref(null);
@@ -13,9 +13,9 @@ const toastType       = ref('success');
 const movements = ref([]);
  
 function stockColor(qty) {
-  if (qty >= 30) return '#22c55e';   // green
-  if (qty >= 15) return '#f59e0b';   // amber
-  return '#ef4444';                  // red
+  if (qty >= 30) return '#22c55e';   
+  if (qty >= 15) return '#f59e0b';   
+  return '#ef4444';                  
 }
  
 function selectProduct(product) {
@@ -37,7 +37,6 @@ async function executeRestock() {
     const prev = Number(selectedProduct.value.total_stock ?? 0);
     const qty  = Number(restockQty.value);
  
-    // Call backend restock endpoint
     const res = await fetch(`http://api.test/inventory/restock`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,8 +50,7 @@ async function executeRestock() {
     if (!data.success) throw new Error(data.message);
  
     const newQty = prev + qty;
- 
-    // Update store locally so UI reflects immediately
+
     const idx = productStore.products.findIndex(
       p => p.product_id === selectedProduct.value.product_id
     );
@@ -61,7 +59,6 @@ async function executeRestock() {
       selectedProduct.value = { ...productStore.products[idx] };
     }
  
-    // Log movement
     movements.value.unshift({
       datetime:    new Date().toLocaleString('en-MY'),
       product:     selectedProduct.value.product_name,
