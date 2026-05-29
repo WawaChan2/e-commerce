@@ -5,7 +5,6 @@ export const useProductsStore = defineStore("products", {
     category: "all",
     keyword: "",
     products: [],
-    orders: [],
   }),
 
   getters: {
@@ -35,37 +34,6 @@ export const useProductsStore = defineStore("products", {
         this.products = data;
       } catch (error) {
         console.error(error);
-      }
-    },
-
-    async fetchOrders() {
-      try {
-        const response = await fetch("http://api.com/orders", {
-          method: "GET",
-        });
-        const data = await response.json();
-        this.orders = data;
-        return data;
-      } catch (error) {
-        console.error("Failed to fetch order history:", error);
-      }
-    },
-
-    async cancelOrder(orderId) {
-      try {
-        const response = await fetch(`http://api.com/orders/${orderId}`, {
-          method: "DELETE",
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to cancel order");
-        }
-
-        await this.fetchOrders();
-        await this.fetchProducts();
-      } catch (error) {
-        console.error("Error cancelling order:", error);
-        throw error;
       }
     },
   },
