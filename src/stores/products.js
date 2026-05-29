@@ -4,7 +4,6 @@ export const useProductsStore = defineStore("products", {
   state: () => ({
     category: "all",
     keyword: "",
-    appliedKeyword: "",
     products: [],
     orders: [],
   }),
@@ -19,7 +18,7 @@ export const useProductsStore = defineStore("products", {
         .filter((product) =>
           product.product_name
             .toLowerCase()
-            .includes(state.appliedKeyword.toLowerCase()),
+            .includes(state.keyword.toLowerCase()),
         );
     },
   },
@@ -39,39 +38,35 @@ export const useProductsStore = defineStore("products", {
       }
     },
 
-    async fetchOrders(){
+    async fetchOrders() {
       try {
         const response = await fetch("http://api.com/orders", {
           method: "GET",
         });
         const data = await response.json();
-        this.orders=data;
+        this.orders = data;
         return data;
-      } catch (error){
+      } catch (error) {
         console.error("Failed to fetch order history:", error);
       }
     },
 
-    async cancelOrder(orderId){
+    async cancelOrder(orderId) {
       try {
         const response = await fetch(`http://api.com/orders/${orderId}`, {
           method: "DELETE",
         });
 
-        if (!response.ok){
+        if (!response.ok) {
           throw new Error("Failed to cancel order");
         }
 
         await this.fetchOrders();
         await this.fetchProducts();
-      } catch (error){
+      } catch (error) {
         console.error("Error cancelling order:", error);
         throw error;
       }
-    },
-
-    applyKeyword() {
-      this.appliedKeyword = this.keyword;
     },
   },
 });
